@@ -1,4 +1,4 @@
-import PhotoTool from '@/components/PhotoTool'
+import ToolSwitcher from '@/components/ToolSwitcher'
 
 const COUNTRIES = [
   { name: 'United States', flag: '🇺🇸', size: '2×2 inches (51×51 mm)' },
@@ -61,7 +61,7 @@ export default function Home() {
           <p className="mt-1.5 text-gray-400 text-xs sm:text-sm">AI-powered background removal, face detection, and auto-cropping — no signup required</p>
         </div>
 
-        <PhotoTool />
+        <ToolSwitcher />
 
         <section className="mt-16 space-y-16">
           <div>

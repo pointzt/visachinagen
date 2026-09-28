@@ -17,3 +17,6 @@ frontend/.env.local
 # Misc
 .DS_Store
 *.log
+
+# MediaPipe task models
+*.task

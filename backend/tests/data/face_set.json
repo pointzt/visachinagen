@@ -1,0 +1,485 @@
+{
+ "description": "Public-domain US federal official portraits from Wikimedia Commons used as a development test set. Images are not stored in the repository; run backend/scripts/fetch_test_faces.py.",
+ "faces": [
+  {
+   "id": "f00",
+   "title": "File:Aaron Bean portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Aaron_Bean_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f01",
+   "title": "File:Adrian Smith portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Adrian_Smith_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": true,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f02",
+   "title": "File:Ami Bera 117th Congress.jpeg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Ami_Bera_117th_Congress.jpeg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f03",
+   "title": "File:Anna Paulina Luna.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Anna_Paulina_Luna.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "long",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f04",
+   "title": "File:Brian Mast portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Brian_Mast_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "bald",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f05",
+   "title": "File:Chuck Fleischmann 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Chuck_Fleischmann_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f06",
+   "title": "File:Clay Higgins 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Clay_Higgins_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "shaved",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f07",
+   "title": "File:Colin Allred portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Colin_Allred_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "bald",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f08",
+   "title": "File:Debbie Lesko 118th Cong.jpeg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Debbie_Lesko_118th_Cong.jpeg",
+   "tags": {
+    "glasses": false,
+    "hair": "long",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f09",
+   "title": "File:Don Beyer Portrait 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Don_Beyer_Portrait_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f10",
+   "title": "File:Eric Swalwell portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Eric_Swalwell_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f11",
+   "title": "File:Erica Lee Carter 118th Congress portrait.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Erica_Lee_Carter_118th_Congress_portrait.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "curly_voluminous",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f12",
+   "title": "File:Frank Lucas portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Frank_Lucas_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": true,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f13",
+   "title": "File:Grace Meng portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Grace_Meng_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "long",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f14",
+   "title": "File:H. Morgan Griffith 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:H._Morgan_Griffith_118th_Congress.jpg",
+   "tags": {
+    "glasses": true,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f15",
+   "title": "File:Jake Auchincloss portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Jake_Auchincloss_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f16",
+   "title": "File:James Lankford official portrait, 118th Congress (tight crop).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:James_Lankford_official_portrait,_118th_Congress_(tight_crop).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f17",
+   "title": "File:Jen Kiggans 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Jen_Kiggans_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "curly",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f18",
+   "title": "File:John James (MI-10).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:John_James_(MI-10).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f19",
+   "title": "File:Mario D\u00edaz-Balart portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Mario_D%C3%ADaz-Balart_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f20",
+   "title": "File:Member Profiles - Rep. Robert Garcia - 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Member_Profiles_-_Rep._Robert_Garcia_-_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f21",
+   "title": "File:Portrait of Congressman Don Davis.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Portrait_of_Congressman_Don_Davis.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f22",
+   "title": "File:Rep. Eric Burlison - 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Eric_Burlison_-_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f23",
+   "title": "File:Rep. French Hill official photo, 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._French_Hill_official_photo,_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f24",
+   "title": "File:Rep. Gabe Amo official portrait, 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Gabe_Amo_official_portrait,_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f25",
+   "title": "File:Rep. Glenn Ivey official portrait, 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Glenn_Ivey_official_portrait,_118th_Congress.jpg",
+   "tags": {
+    "glasses": true,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f26",
+   "title": "File:Rep. Jasmine Crockett - 118th Congress (1).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Jasmine_Crockett_-_118th_Congress_(1).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "braids_updo",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f27",
+   "title": "File:Rep. Kevin Mullin official portrait, 118th Congress (1).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Kevin_Mullin_official_portrait,_118th_Congress_(1).jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f28",
+   "title": "File:Rep. Mike Collins official photo, 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Mike_Collins_official_photo,_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f29",
+   "title": "File:Rep. Mike Ezell official photo.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Mike_Ezell_official_photo.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f30",
+   "title": "File:Rep. Morgan Luttrell official photo.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Morgan_Luttrell_official_photo.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f31",
+   "title": "File:Rep. Nehls Official HEadshot - 118th2 0.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Nehls_Official_HEadshot_-_118th2_0.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f32",
+   "title": "File:Rep. Tom Kean official photo, 118th Congress.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Tom_Kean_official_photo,_118th_Congress.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f33",
+   "title": "File:Rep. Troy Nehls official photo.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep._Troy_Nehls_official_photo.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f34",
+   "title": "File:Rep Gabriel Vasquez Official Portrait.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rep_Gabriel_Vasquez_Official_Portrait.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f35",
+   "title": "File:Representative Tony Wied Official Portrait.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Representative_Tony_Wied_Official_Portrait.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f36",
+   "title": "File:Rosa DeLauro 118th Congress.jpeg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Rosa_DeLauro_118th_Congress.jpeg",
+   "tags": {
+    "glasses": false,
+    "hair": "short_dyed",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f37",
+   "title": "File:Sanford Bishop portrait (118th Congress).jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Sanford_Bishop_portrait_(118th_Congress).jpg",
+   "tags": {
+    "glasses": true,
+    "hair": "short",
+    "background": "plain",
+    "framing": "head_and_shoulders"
+   }
+  },
+  {
+   "id": "f38",
+   "title": "File:Senator Ted Budd official portrait.jpg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Senator_Ted_Budd_official_portrait.jpg",
+   "tags": {
+    "glasses": false,
+    "hair": "short",
+    "background": "busy",
+    "framing": "distant"
+   }
+  },
+  {
+   "id": "f39",
+   "title": "File:Zoe Lofgren Official Portrait 2024.jpeg",
+   "license": "Public domain",
+   "source": "https://commons.wikimedia.org/wiki/File:Zoe_Lofgren_Official_Portrait_2024.jpeg",
+   "tags": {
+    "glasses": true,
+    "hair": "curly",
+    "background": "busy",
+    "framing": "head_and_shoulders"
+   }
+  }
+ ]
+}

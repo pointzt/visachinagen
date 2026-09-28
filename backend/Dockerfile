@@ -18,6 +18,9 @@ RUN python -c "from rembg import new_session; new_session('birefnet-portrait')"
 
 RUN mkdir -p /home/user/models && python -c "import urllib.request; urllib.request.urlretrieve('https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite', '/home/user/models/blaze_face_short_range.tflite')"
 
+# China visa engine (v2): face landmarks + head pose, and shoulder landmarks for tilt evidence.
+RUN python -c "import urllib.request as u; u.urlretrieve('https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task', '/home/user/models/face_landmarker.task'); u.urlretrieve('https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task', '/home/user/models/pose_landmarker_lite.task')"
+
 COPY --chown=user . /app
 
 EXPOSE 7860

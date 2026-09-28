@@ -191,6 +191,10 @@ Open http://localhost:3000
 | `GET` | `/api/requirements` | All country photo specs |
 | `GET` | `/api/requirements/{code}` | Single country spec |
 | `GET` | `/api/health` | Health check |
+| `POST` | `/api/v2/process` | China visa engine: tilt, background, lighting, geometry, and validation of the exported file |
+| `GET` | `/api/v2/spec/china_visa` | Versioned China visa spec (MFA 2016) |
+
+The China visa engine is documented in [docs/china-visa-engine.md](docs/china-visa-engine.md).
 
 <br/>
 
