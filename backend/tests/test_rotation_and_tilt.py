@@ -114,40 +114,64 @@ def test_camera_tilt_confirmed_by_scene_lines_auto_rotates(policy):
     assert d.angle_deg == pytest.approx(4.0)
 
 
-def test_head_tilt_against_level_room_is_not_rotated(policy):
+def test_head_tilt_against_level_room_is_straightened(policy):
     d = decide_tilt(6.0, 0.95, scene(0.2), None, policy["tilt"])
     assert d.classification == "head_tilt"
-    assert not d.auto_apply and d.angle_deg == 0.0
+    assert d.auto_apply and d.angle_deg == pytest.approx(6.0)  # levels the eyes, not the room
 
 
-def test_head_tilt_against_level_shoulders_is_not_rotated(policy):
+def test_head_tilt_against_level_shoulders_is_straightened(policy):
     d = decide_tilt(-5.0, 0.95, None, shoulders(0.3), policy["tilt"])
-    assert d.classification == "head_tilt" and not d.auto_apply
+    assert d.classification == "head_tilt" and d.auto_apply
+    assert d.angle_deg == pytest.approx(-5.0)
 
 
-def test_shoulder_agreement_only_suggests(policy):
+def test_shoulder_agreement_is_straightened(policy):
     d = decide_tilt(3.0, 0.95, None, shoulders(2.4), policy["tilt"])
     assert d.classification == "camera_tilt"
-    assert not d.auto_apply and d.suggest
+    assert d.auto_apply and not d.suggest
+    assert d.angle_deg == pytest.approx(2.7)
 
 
-def test_no_reference_is_ambiguous_and_only_suggested(policy):
+def test_no_reference_is_ambiguous_but_straightened(policy):
     d = decide_tilt(3.0, 0.95, None, None, policy["tilt"])
     assert d.classification == "ambiguous"
-    assert not d.auto_apply and d.suggest
+    assert d.auto_apply and d.angle_deg == pytest.approx(3.0)
     assert d.confidence < 0.5
+
+
+def test_tilt_within_landmark_noise_is_not_straightened(policy):
+    d = decide_tilt(1.0, 0.95, None, shoulders(0.2), policy["tilt"])
+    assert d.classification == "head_tilt" and not d.auto_apply and d.angle_deg == 0.0
+    d = decide_tilt(-1.2, 0.95, None, None, policy["tilt"])
+    assert d.classification == "ambiguous" and not d.auto_apply and d.suggest
+
+
+def test_head_tilt_is_only_reported_when_straightening_is_off(policy):
+    tp = {**policy["tilt"], "straighten_head_tilt": False}
+    d = decide_tilt(6.0, 0.95, scene(0.2), None, tp)
+    assert d.classification == "head_tilt" and not d.auto_apply and d.angle_deg == 0.0
+    d = decide_tilt(3.0, 0.95, None, shoulders(2.4), tp)
+    assert not d.auto_apply and d.suggest
+    d = decide_tilt(3.0, 0.95, None, None, tp)
+    assert d.classification == "ambiguous" and not d.auto_apply and d.suggest
 
 
 def test_low_face_confidence_blocks_auto_rotation(policy):
     d = decide_tilt(4.0, 0.72, scene(4.0), None, policy["tilt"])
     assert d.classification == "camera_tilt" and not d.auto_apply and d.suggest
+    d = decide_tilt(6.0, 0.72, scene(0.2), None, policy["tilt"])
+    assert d.classification == "head_tilt" and not d.auto_apply and d.suggest
 
 
-def test_large_tilt_is_never_auto_rotated(policy):
-    d = decide_tilt(14.0, 0.95, scene(14.0), None, policy["tilt"])
-    assert not d.auto_apply
+@pytest.mark.parametrize("ref", [scene(14.0), scene(0.2), None])
+def test_large_tilt_is_never_auto_rotated(policy, ref):
+    d = decide_tilt(14.0, 0.95, ref, None, policy["tilt"])
+    assert not d.auto_apply and d.suggest
+    assert d.angle_deg == pytest.approx(14.0)
 
 
-def test_disagreeing_references_are_ambiguous(policy):
+def test_disagreeing_references_are_ambiguous_and_straightened(policy):
     d = decide_tilt(6.0, 0.95, scene(2.5), shoulders(-2.0), policy["tilt"])
-    assert d.classification == "ambiguous" and not d.auto_apply
+    assert d.classification == "ambiguous" and d.auto_apply
+    assert d.angle_deg == pytest.approx(6.0)

@@ -16,8 +16,7 @@ MM_PER_INCH = 25.4
 
 def _find_specs_dir() -> str:
     """``PHOTOGEN_SPECS_DIR`` wins; otherwise the nearest ``shared/specs`` above this file
-    (the repo layout; a Docker build from ``backend/`` must copy ``shared/`` in the same way
-    as ``shared/photo_requirements.json``)."""
+    (the repo layout; a Docker build from ``backend/`` must copy ``shared/specs`` in too)."""
     env = os.environ.get("PHOTOGEN_SPECS_DIR")
     if env:
         return env

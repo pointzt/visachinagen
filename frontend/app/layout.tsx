@@ -1,42 +1,37 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { cn } from '@/lib/utils'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://photogen.io'
 
 export const metadata: Metadata = {
   title: {
-    default: 'PhotoGen - Free Passport Photo Maker Online | AI Passport Photo Generator',
+    default: 'PhotoGen - Free China Visa Photo Maker Online',
     template: '%s | PhotoGen',
   },
   description:
-    'Create compliant passport and ID photos for free. AI-powered background removal, face detection, and auto-cropping for US, UK, EU, Canada, Australia, India, Japan, Germany, and China. No signup required, no watermark.',
+    'Create a China visa photo for free, checked against the Chinese MFA 2016 photo requirements. AI background removal, tilt and lighting correction, and 420×560 digital or 33×48 mm print output. No signup required, no watermark.',
   keywords: [
-    'passport photo maker',
-    'free passport photo',
-    'passport photo online',
-    'ID photo maker',
-    'visa photo maker',
-    'passport photo background removal',
-    'passport photo AI',
-    'passport photo app',
-    'make passport photo at home',
-    'passport photo 2x2',
-    'US passport photo online free',
-    'UK passport photo maker',
-    'Canada passport photo online',
-    'EU visa photo maker',
-    'passport photo no watermark',
-    'passport photo crop tool',
-    'remove background passport photo',
+    'China visa photo',
+    'Chinese visa photo maker',
+    'China visa photo online',
+    'China visa photo size',
+    'China visa photo 33x48',
+    'China visa photo 420x560',
+    'China visa photo requirements',
+    'free visa photo maker',
+    'visa photo no watermark',
   ],
   openGraph: {
-    title: 'PhotoGen - Free Passport Photo Maker',
+    title: 'PhotoGen - Free China Visa Photo Maker',
     description:
-      'Create compliant passport and ID photos instantly with AI. Background removal, face detection, auto-cropping for 9+ countries. 100% free, no signup.',
+      'Create a compliant China visa photo instantly. Checked against the MFA 2016 requirements. 100% free, no signup.',
     url: SITE_URL,
     siteName: 'PhotoGen',
     type: 'website',
@@ -46,20 +41,30 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'PhotoGen - Free AI Passport Photo Maker',
+        alt: 'PhotoGen - Free China Visa Photo Maker',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PhotoGen - Free Passport Photo Maker',
+    title: 'PhotoGen - Free China Visa Photo Maker',
     description:
-      'AI-powered passport photos for free. No signup, no watermark, no data stored.',
+      'China visa photos for free. No signup, no watermark, no data stored.',
     images: [`${SITE_URL}/og-image.png`],
   },
+  applicationName: 'PhotoGen',
+  appleWebApp: { capable: true, title: 'PhotoGen', statusBarStyle: 'default' },
+  formatDetection: { telephone: false },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
   metadataBase: new URL(SITE_URL),
+}
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 }
 
 const jsonLd = {
@@ -68,15 +73,15 @@ const jsonLd = {
   name: 'PhotoGen',
   url: SITE_URL,
   description:
-    'Free AI-powered passport and ID photo maker. Background removal, face detection, and auto-cropping for US, UK, EU, Canada, and more.',
+    'Free China visa photo maker built to the Chinese MFA 2016 photo requirements.',
   applicationCategory: 'PhotographyApplication',
   operatingSystem: 'Web',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   featureList: [
     'AI background removal',
     'Face detection',
-    'Auto-cropping to official specs',
-    'US, UK, EU, Canada, Australia, India, Japan, Germany, China support',
+    'Automatic framing to the MFA 2016 China visa spec',
+    'Tilt, lighting and background checks',
     'No watermark',
     'No signup required',
   ],
@@ -84,16 +89,17 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn('font-sans', inter.variable)}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${inter.className} antialiased`}>
-        {children}
+      <body className="antialiased">
+        <TooltipProvider>{children}</TooltipProvider>
         <Analytics />
+        <ServiceWorkerRegister />
       </body>
     </html>
   )

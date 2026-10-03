@@ -133,6 +133,35 @@ def shoulder_reference(rgb: np.ndarray, min_visibility: float = 0.8) -> Referenc
 
 def decide_tilt(eye_roll_deg: float, face_confidence: float, scene: Reference | None,
                 shoulders: Reference | None, policy: dict) -> TiltDecision:
+    """Classify the tilt, then decide whether to straighten it.
+
+    With ``straighten_head_tilt`` the photo is also rotated when the head itself is tilted (or
+    the cause is unclear) so the eye line ends up level: the sheet asks for an upright head, and a
+    slightly tilted body is the lesser problem. The same safety limits apply as for camera tilt.
+    """
+    d = _classify_tilt(eye_roll_deg, face_confidence, scene, shoulders, policy)
+    if not policy.get("straighten_head_tilt", False) or d.classification == "level" or d.auto_apply:
+        return d
+    # Camera tilt keeps its reference angle; otherwise level the eyes themselves.
+    angle = d.angle_deg if d.classification == "camera_tilt" else eye_roll_deg
+    if abs(angle) < policy.get("straighten_min_deg", 0.0):
+        return d  # within landmark noise; rotating would not make the head visibly straighter
+    confident_face = face_confidence >= policy.get("review_face_confidence", 0.85)
+    d.angle_deg = angle
+    if confident_face and abs(angle) <= policy["max_auto_rotate_deg"]:
+        d.auto_apply, d.suggest = True, False
+        d.reason += f" Rotating by {angle:+.1f}° makes the head upright."
+        if d.classification == "head_tilt":
+            d.reason += " The shoulders then lean by about the same amount."
+    else:
+        d.suggest = True
+        d.reason += (f" {abs(angle):.1f}° is more than the {policy['max_auto_rotate_deg']:.0f}° that is straightened automatically."
+                     if confident_face else " Face detection is too uncertain to straighten automatically.")
+    return d
+
+
+def _classify_tilt(eye_roll_deg: float, face_confidence: float, scene: Reference | None,
+                   shoulders: Reference | None, policy: dict) -> TiltDecision:
     level = policy["level_threshold_deg"]
     tol = policy["agreement_tolerance_deg"]
     ref_level = policy["reference_level_deg"]

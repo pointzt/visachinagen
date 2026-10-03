@@ -20,3 +20,7 @@ frontend/.env.local
 
 # MediaPipe task models
 *.task
+
+# Local environments and editor settings
+.venv/
+.vscode/

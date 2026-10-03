@@ -112,6 +112,16 @@ def test_manual_rotation_is_rigid_and_geometry_is_recomputed():
         assert c[cid]["status"] == "pass", (cid, c[cid])
 
 
+def test_tilted_head_is_straightened_automatically():
+    image, matte = load("f08")  # eye line tilted about -6°
+    r = process(image, "digital", None, matte)
+    rot = next(x for x in r["corrections"] if x["id"] == "rotation")
+    assert rot["applied"] and rot["mode"] == "auto"
+    c = checks(r)
+    assert c["in.head_tilt"]["status"] == "pass"
+    assert abs(c["out.pose_roll"]["measured"]) < 1.5
+
+
 def test_rotation_can_be_turned_off():
     image, matte = load("f08")  # eye line tilted about -6°
     r = process(image, "digital", {"rotation": "off"}, matte)

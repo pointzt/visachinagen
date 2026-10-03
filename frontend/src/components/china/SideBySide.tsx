@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import type { Guides } from '@/lib/chinaVisa'
 import { useObjectUrl } from '@/hooks/useObjectUrl'
+import { cn } from '@/lib/utils'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 interface SideBySideProps {
   original: string
@@ -38,6 +41,7 @@ function GuideOverlay({ guides, width, height }: { guides: Guides; width: number
 export default function SideBySide({ original, processed, mask, guides, width, height, busy }: SideBySideProps) {
   const [showGuides, setShowGuides] = useState(true)
   const [showMask, setShowMask] = useState(false)
+  const id = useId()
   const originalUrl = useObjectUrl(showMask && mask ? mask : original)
   const processedUrl = useObjectUrl(processed)
 
@@ -45,39 +49,41 @@ export default function SideBySide({ original, processed, mask, guides, width, h
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <figure className="space-y-1.5">
-          <div className="relative rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center" style={{ aspectRatio: `${width} / ${height}` }}>
+          <div className="relative flex items-center justify-center overflow-hidden rounded-lg border bg-muted" style={{ aspectRatio: `${width} / ${height}` }}>
             {originalUrl && <img src={originalUrl} alt={showMask ? 'Background mask preview' : 'Original photo'} className="max-h-full max-w-full object-contain" />}
           </div>
-          <figcaption className="text-[11px] text-gray-500 text-center">{showMask ? 'Mask preview (pink = removed)' : 'Original'}</figcaption>
+          <figcaption className="text-center text-[11px] text-muted-foreground">{showMask ? 'Mask preview (pink = removed)' : 'Original'}</figcaption>
         </figure>
         <figure className="space-y-1.5">
-          <div className="relative rounded-lg overflow-hidden border border-gray-200 bg-white" style={{ aspectRatio: `${width} / ${height}` }}>
+          <div className="relative overflow-hidden rounded-lg border bg-white" style={{ aspectRatio: `${width} / ${height}` }}>
             {processedUrl ? (
               <>
-                <img src={processedUrl} alt="Processed visa photo" className={`absolute inset-0 h-full w-full ${busy ? 'opacity-50' : ''}`} />
+                <img src={processedUrl} alt="Processed visa photo" className={cn('absolute inset-0 h-full w-full', busy && 'opacity-50')} />
                 {showGuides && guides && <GuideOverlay guides={guides} width={width} height={height} />}
               </>
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400 p-4 text-center">No output</div>
+              <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-xs text-muted-foreground">No output</div>
             )}
           </div>
-          <figcaption className="text-[11px] text-gray-500 text-center">Processed · {width}×{height}px</figcaption>
+          <figcaption className="text-center text-[11px] text-muted-foreground">Processed · {width}×{height}px</figcaption>
         </figure>
       </div>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600">
-        <label className="flex items-center gap-1.5">
-          <input type="checkbox" checked={showGuides} onChange={(e) => setShowGuides(e.target.checked)} /> Measurement guides
-        </label>
-        <label className="flex items-center gap-1.5">
-          <input type="checkbox" checked={showMask} onChange={(e) => setShowMask(e.target.checked)} disabled={!mask} /> Background mask
-        </label>
+      <div className="flex flex-wrap gap-x-4 gap-y-2">
+        <div className="flex items-center gap-1.5">
+          <Checkbox id={`${id}-guides`} checked={showGuides} onCheckedChange={(v) => setShowGuides(v === true)} />
+          <Label htmlFor={`${id}-guides`} className="text-xs font-normal">Measurement guides</Label>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Checkbox id={`${id}-mask`} checked={showMask} onCheckedChange={(v) => setShowMask(v === true)} disabled={!mask} />
+          <Label htmlFor={`${id}-mask`} className="text-xs font-normal">Background mask</Label>
+        </div>
       </div>
       {showGuides && guides && (
-        <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-gray-500">
-          <span><span className="inline-block w-3 h-0.5 bg-green-600 align-middle mr-1" />Crown / chin (measured)</span>
-          <span><span className="inline-block w-3 h-0.5 bg-yellow-500 align-middle mr-1" />Eye line (measured)</span>
-          <span><span className="inline-block w-3 h-2 bg-green-500/20 align-middle mr-1" />Allowed crown zone</span>
-          <span><span className="inline-block w-3 h-0.5 border-t border-dashed border-orange-500 align-middle mr-1" />Limit</span>
+        <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+          <span><span className="mr-1 inline-block h-0.5 w-3 bg-green-600 align-middle" />Crown / chin (measured)</span>
+          <span><span className="mr-1 inline-block h-0.5 w-3 bg-yellow-500 align-middle" />Eye line (measured)</span>
+          <span><span className="mr-1 inline-block h-2 w-3 bg-green-500/20 align-middle" />Allowed crown zone</span>
+          <span><span className="mr-1 inline-block h-0.5 w-3 border-t border-dashed border-orange-500 align-middle" />Limit</span>
         </div>
       )}
     </div>

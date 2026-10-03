@@ -1,4 +1,4 @@
-"""China visa engine API (v2). The v1 /api/process endpoint is unchanged.
+"""China visa engine API (v2).
 
 Endpoints are plain ``def`` so FastAPI runs the CPU-heavy work in its thread pool instead of
 blocking the event loop.

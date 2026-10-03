@@ -3,7 +3,11 @@
 import { useMemo, useState } from 'react'
 import type { PhotoSpec } from '@/lib/types'
 import { PAPER_SIZES, computePrintSheetLayout, renderPrintSheet } from '@/lib/printSheet'
-import Button from './ui/Button'
+import { DownloadIcon } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 interface PrintSheetProps {
   imageSrc: string
@@ -38,31 +42,24 @@ export default function PrintSheet({ imageSrc, spec, filter }: PrintSheetProps) 
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-2">
+      <ToggleGroup type="single" variant="outline" size="sm" spacing={2} value={paperId}
+        onValueChange={(v) => v && setPaperId(v)} className="flex-wrap">
         {PAPER_SIZES.map((p) => (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => setPaperId(p.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-              p.id === paperId
-                ? 'border-primary-500 bg-primary-50 text-primary-700'
-                : 'border-gray-200 text-gray-500 hover:border-gray-300'
-            }`}
-          >
+          <ToggleGroupItem key={p.id} value={p.id}
+            className="text-xs data-[state=on]:border-primary data-[state=on]:bg-primary/10 data-[state=on]:text-primary">
             {p.label}
-          </button>
+          </ToggleGroupItem>
         ))}
-      </div>
+      </ToggleGroup>
 
       {layout.count === 0 ? (
-        <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
-          This photo doesn&apos;t fit on the selected paper size.
-        </p>
+        <Alert className="border-amber-200 bg-amber-50 text-amber-800">
+          <AlertDescription className="text-amber-800">This photo doesn&apos;t fit on the selected paper size.</AlertDescription>
+        </Alert>
       ) : (
         <>
           <div
-            className="mx-auto bg-gray-50 border border-gray-200 rounded-lg p-2"
+            className="mx-auto rounded-lg border bg-muted p-2"
             style={{ aspectRatio: previewAspect, maxWidth: previewAspect >= 1 ? '100%' : 260 }}
           >
             <div
@@ -76,7 +73,7 @@ export default function PrintSheet({ imageSrc, spec, filter }: PrintSheetProps) 
               }}
             >
               {Array.from({ length: layout.count }).map((_, i) => (
-                <div key={i} className="border border-dashed border-gray-300 overflow-hidden">
+                <div key={i} className="overflow-hidden border border-dashed border-foreground/20">
                   <img
                     src={imageSrc}
                     alt={`Copy ${i + 1}`}
@@ -88,14 +85,12 @@ export default function PrintSheet({ imageSrc, spec, filter }: PrintSheetProps) 
             </div>
           </div>
 
-          <p className="text-[11px] text-gray-400 text-center">
+          <p className="text-center text-[11px] text-muted-foreground">
             {layout.count} photo{layout.count === 1 ? '' : 's'} ({layout.cols}x{layout.rows}) on {paper.label}
           </p>
 
-          <Button onClick={handleDownload} loading={downloading} className="w-full" size="lg" variant="secondary">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
+          <Button onClick={handleDownload} disabled={downloading} className="w-full" size="lg" variant="secondary">
+            {downloading ? <Spinner /> : <DownloadIcon />}
             Download Print Sheet
           </Button>
         </>

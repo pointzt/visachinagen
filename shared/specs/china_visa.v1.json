@@ -94,6 +94,8 @@
       "agreement_tolerance_deg": 2.0,
       "reference_level_deg": 1.0,
       "auto_rotate_on_shoulder_agreement": false,
+      "straighten_head_tilt": true,
+      "straighten_min_deg": 1.5,
       "head_roll_warn_deg": 5.0,
       "min_scene_lines": 2
     },

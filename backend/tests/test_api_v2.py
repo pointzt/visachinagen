@@ -61,6 +61,7 @@ def test_unknown_profile_is_rejected(monkeypatch):
     assert r.status_code == 400
 
 
-def test_legacy_endpoint_still_registered():
+def test_only_china_visa_endpoints_registered():
     paths = {route.path for route in app.routes}
-    assert "/api/process" in paths and "/api/v2/process" in paths
+    assert "/api/v2/process" in paths
+    assert "/api/process" not in paths

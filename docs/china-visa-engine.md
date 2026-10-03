@@ -1,10 +1,9 @@
 # China visa photo engine (API v2)
 
 A processing and validation pipeline for Chinese visa photos, built to the MFA Department of
-Consular Affairs sheet *Photo Requirements for Chinese Visa Application* (2016). It runs next to
-the original `/api/process` flow, which is unchanged.
+Consular Affairs sheet *Photo Requirements for Chinese Visa Application* (2016).
 
-The UI is the **China visa (MFA 2016 checks)** tab on the home page
+The UI is the home page
 (`frontend/src/components/china/`). The API is `POST /api/v2/process`.
 
 ## Pipeline
@@ -60,17 +59,18 @@ The sheet allows voluminous hair to be trimmed at the top edge. The solver there
 with a trimmed-hair crown when the hair-inclusive layout is infeasible, and the output
 validator reports that case as `provisional`.
 
-The legacy `CHINA_VISA` entry in `shared/photo_requirements.json` (390×567, ≤120 KB) mixes the
-paper size with the digital file limit, and 567 px exceeds the 560 px digital maximum. It is
-left untouched for the v1 flow. Use the v2 tab for China visas.
-
 ## Safety rules
 
-- **Rotation** is automatic only when straight background lines agree with the eye line
-  (within 2°, |angle| ≤ 10°, face confidence ≥ 0.85).
-  - Shoulder agreement alone, or no reference at all, gives a *suggested* one-click rotation.
-  - Level references with a tilted eye line mean head tilt. The photo is not rotated, and a
-    retake is advised.
+- **Rotation** straightens the head automatically so the eye line is level
+  (|angle| between 1.5° and 10°, face confidence ≥ 0.85).
+  - When straight background lines agree with the eye line (within 2°), it is camera tilt and
+    the photo is rotated by the background angle, so the room ends up level too.
+  - Otherwise (head tilt against level shoulders or room, shoulder agreement, or no reference)
+    the photo is rotated by the eye-line angle. For a real head tilt the shoulders then lean by
+    about the same amount; an upright head is what the sheet asks for.
+  - Tilts under 1.5° are left alone (landmark noise is about ±0.7°). Tilts over 10°, or an
+    uncertain face, give a *suggested* one-click rotation and a retake warning.
+  - `policy.tilt.straighten_head_tilt: false` restores the old behaviour (camera tilt only).
   - Rotation is rigid. Faces are never warped.
 - **Lighting** uses global, chroma-preserving operations only. Exposure is lifted (≤ +0.5 EV)
   only when the face's highlights are dark *and* nothing in the frame is bright, so a
@@ -98,12 +98,12 @@ backgrounds. Results at spec v1.0.0:
 
 | Metric | Result |
 |---|---|
-| Hard failures on originals | 0 / 40 (all `review`: 34 subjects smile, 15 sources are low-resolution) |
-| False automatic rotation on originals | 0 / 40 |
+| Hard failures on originals | 1 / 40 (`out.face_width` after straightening, see limitations; all `review`: 34 subjects smile, 15 sources are low-resolution) |
+| Originals straightened automatically (eye line tilted ≥ 1.5°) | 19 / 40 |
 | Lighting changed on correctly exposed originals | 0 / 40 |
 | −1 EV underexposed copies lifted | 40 / 40 |
-| Simulated camera roll ±3°/±7°: rotation offered or applied | 141 / 160 (auto: 0, see limitations) |
-| Suggested angle error (median) | 0.22° |
+| Simulated camera roll ±3°/±7°: rotation offered or applied | 156 / 160 (auto: 128) |
+| Rotation angle error (median) | 0.22° |
 
 The same metrics are broken down in the report by glasses, hair type, background type and
 skin-lightness tercile. They are consistent across groups on this set.
@@ -111,8 +111,11 @@ skin-lightness tercile. They are consistent across groups on this set.
 ## Limitations
 
 - **Camera tilt vs head tilt** can often not be decided from one photo. Plain walls and blurred
-  backdrops have no straight lines, and shoulders are rarely level. Most tilted photos therefore
-  get a *suggested* rotation rather than an automatic one. This is intentional.
+  backdrops have no straight lines, and shoulders are rarely level. Both are straightened by
+  levelling the eyes, so the distinction only decides whether the body ends up leaning.
+- **Face width after rotation** comes from cheek landmarks, which shift by a few percent when the
+  image is rotated. A face near the 191 px lower limit can fail `out.face_width` after
+  straightening (1 of 40 in the set).
 - **Crown under hair** is estimated. For voluminous hair, the anatomical crown comes from the
   chin-to-forehead distance (ratio 1.28, from bald subjects in the calibration set) and is
   treated as provisional.

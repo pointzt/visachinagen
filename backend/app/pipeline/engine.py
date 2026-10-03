@@ -149,17 +149,18 @@ def _input_face_checks(face: face_analysis.FaceAnalysis, spec: dict, policy: dic
     return checks
 
 
-def _tilt_checks(decision: tilt.TiltDecision, face: face_analysis.FaceAnalysis, applied_deg: float, policy: dict, spec: dict) -> list[Check]:
+def _tilt_checks(face: face_analysis.FaceAnalysis, applied_deg: float, mode: str, policy: dict, spec: dict) -> list[Check]:
     residual = face.eye_roll_deg
     limit = spec["pose_limits"]["max_abs_roll_deg"]
     warn = policy["tilt"]["head_roll_warn_deg"]
-    if decision.classification == "head_tilt" and abs(residual) > warn:
+    if abs(residual) > warn:
+        why = {"off": "Straightening is turned off.", "manual": "The manual angle does not level it."}.get(
+            mode, "It could not be straightened automatically.")
         return [Check("in.head_tilt", "pose", "Head held straight", WARN if abs(residual) <= limit else FAIL,
-                      f"Your head is tilted {residual:+.1f}° relative to your shoulders or the room. It was not rotated "
-                      "automatically because that would tilt your body instead. Retake with your head straight, or rotate manually.",
+                      f"Your head is tilted {residual:+.1f}°. {why} Retake with your head straight, or straighten it manually.",
                       stage="input", basis="provisional", measured=round(residual, 1), unit="°", remedy="retake")]
     return [Check("in.head_tilt", "pose", "Head held straight", PASS,
-                  f"Eye line {residual:+.1f}° after correction." if applied_deg else f"Eye line {residual:+.1f}°.",
+                  f"Straightened by {applied_deg:+.1f}°; eye line now {residual:+.1f}°." if applied_deg else f"Eye line {residual:+.1f}°.",
                   stage="input", basis="provisional", measured=round(residual, 1), unit="°")]
 
 
@@ -283,7 +284,7 @@ def process(image_bytes: bytes, profile: str = "digital", overrides: dict | None
         else:
             rgb, alpha, valid, face = r_rgb, r_alpha, r_valid, r_face
     timings["tilt_ms"] = round((time.time() - t) * 1000)
-    checks += _tilt_checks(decision, face, angle, policy, spec)
+    checks += _tilt_checks(face, angle, ov.rotation, policy, spec)
 
     head = measure_head(face, alpha > 127, policy)
 
@@ -340,7 +341,7 @@ def process(image_bytes: bytes, profile: str = "digital", overrides: dict | None
     corrections = [
         {
             "id": "rotation",
-            "label": "Straighten camera tilt",
+            "label": "Straighten head tilt" if decision.classification in ("head_tilt", "ambiguous") else "Straighten camera tilt",
             "applied": abs(angle) >= 0.05,
             "mode": ov.rotation,
             "angle_deg": round(angle, 2),
