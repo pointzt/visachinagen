@@ -1,7 +1,7 @@
 'use client'
 
 import { DragEvent, useRef, useState } from 'react'
-import { UploadIcon, VideoIcon } from 'lucide-react'
+import { CameraIcon, UploadIcon } from 'lucide-react'
 import { useWebcam } from '@/hooks/useWebcam'
 import { cn } from '@/lib/utils'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -52,7 +52,7 @@ export default function PhotoUploader({ onFileSelect, previewUrl, error, onClear
   if (showWebcam) {
     return (
       <div className="space-y-4 animate-fade-in">
-        <div className="relative aspect-video overflow-hidden rounded-lg bg-neutral-900">
+        <div className="relative aspect-video overflow-hidden rounded-lg bg-black">
           <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
           {!camActive && (
             <div className="absolute inset-0 flex items-center justify-center text-white/70 text-sm">
@@ -79,12 +79,12 @@ export default function PhotoUploader({ onFileSelect, previewUrl, error, onClear
   if (previewUrl) {
     return (
       <div className="space-y-3 animate-fade-in">
-        <div className="relative rounded-lg overflow-hidden border aspect-square max-w-40 sm:max-w-52 mx-auto">
-          <img src={previewUrl} alt="Uploaded" className="w-full h-full object-cover" />
+        <div className="relative mx-auto aspect-square max-w-48 overflow-hidden rounded-lg border">
+          <img src={previewUrl} alt="Uploaded" className="h-full w-full object-cover" />
         </div>
         <div className="flex justify-center">
-          <Button variant="ghost" size="sm" onClick={onClear}>
-            Remove & re-upload
+          <Button variant="outline" size="sm" onClick={onClear}>
+            Choose another photo
           </Button>
         </div>
       </div>
@@ -99,19 +99,18 @@ export default function PhotoUploader({ onFileSelect, previewUrl, error, onClear
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
         className={cn(
-          'cursor-pointer rounded-lg border-2 border-dashed p-6 text-center transition-all duration-150',
-          dragging ? 'border-primary bg-primary/10' : 'hover:border-primary/50 hover:bg-primary/5'
+          'cursor-pointer rounded-lg border border-dashed p-6 text-center transition-colors',
+          dragging ? 'border-ring bg-accent' : 'hover:bg-accent/50'
         )}
       >
-        <div className="flex flex-col items-center gap-2">
-          <div className="rounded-full bg-primary/10 p-2.5">
-            <UploadIcon className="size-5 text-primary" />
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+            <UploadIcon className="size-5" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-foreground">Drop your photo here</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">or click to browse</p>
+          <div className="space-y-1">
+            <p className="text-sm font-medium">Drop your photo here</p>
+            <p className="text-sm text-muted-foreground">or click to browse · up to 15 MB</p>
           </div>
-          <span className="text-[11px] tracking-wide text-muted-foreground/70 sm:text-[10px]">All image formats up to 15 MB</span>
         </div>
         <input
           ref={fileInputRef}
@@ -122,14 +121,14 @@ export default function PhotoUploader({ onFileSelect, previewUrl, error, onClear
         />
       </div>
 
-      <Button variant="ghost" size="sm" onClick={openWebcam} className="w-full text-xs text-muted-foreground hover:text-primary">
-        <VideoIcon />
-        or use webcam
+      <Button variant="outline" onClick={openWebcam} className="w-full">
+        <CameraIcon />
+        Use camera
       </Button>
 
       {error && (
-        <Alert variant="destructive" className="border-destructive/30 bg-destructive/5">
-          <AlertDescription className="text-center text-destructive">{error}</AlertDescription>
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
     </div>

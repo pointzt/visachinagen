@@ -4,8 +4,8 @@ import { useId, useState } from 'react'
 import type { Guides } from '@/lib/chinaVisa'
 import { useObjectUrl } from '@/hooks/useObjectUrl'
 import { cn } from '@/lib/utils'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
+import { Field, FieldLabel } from '@/components/ui/field'
+import { Switch } from '@/components/ui/switch'
 
 interface SideBySideProps {
   original: string
@@ -52,7 +52,7 @@ export default function SideBySide({ original, processed, mask, guides, width, h
           <div className="relative flex items-center justify-center overflow-hidden rounded-lg border bg-muted" style={{ aspectRatio: `${width} / ${height}` }}>
             {originalUrl && <img src={originalUrl} alt={showMask ? 'Background mask preview' : 'Original photo'} className="max-h-full max-w-full object-contain" />}
           </div>
-          <figcaption className="text-center text-[11px] text-muted-foreground">{showMask ? 'Mask preview (pink = removed)' : 'Original'}</figcaption>
+          <figcaption className="text-center text-xs text-muted-foreground">{showMask ? 'Mask preview (pink = removed)' : 'Original'}</figcaption>
         </figure>
         <figure className="space-y-1.5">
           <div className="relative overflow-hidden rounded-lg border bg-white" style={{ aspectRatio: `${width} / ${height}` }}>
@@ -65,21 +65,21 @@ export default function SideBySide({ original, processed, mask, guides, width, h
               <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-xs text-muted-foreground">No output</div>
             )}
           </div>
-          <figcaption className="text-center text-[11px] text-muted-foreground">Processed · {width}×{height}px</figcaption>
+          <figcaption className="text-center text-xs text-muted-foreground">Processed · {width}×{height}px</figcaption>
         </figure>
       </div>
-      <div className="flex flex-wrap gap-x-4 gap-y-2">
-        <div className="flex items-center gap-1.5">
-          <Checkbox id={`${id}-guides`} checked={showGuides} onCheckedChange={(v) => setShowGuides(v === true)} />
-          <Label htmlFor={`${id}-guides`} className="text-xs font-normal">Measurement guides</Label>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Checkbox id={`${id}-mask`} checked={showMask} onCheckedChange={(v) => setShowMask(v === true)} disabled={!mask} />
-          <Label htmlFor={`${id}-mask`} className="text-xs font-normal">Background mask</Label>
-        </div>
+      <div className="flex flex-wrap gap-x-6 gap-y-3">
+        <Field orientation="horizontal" className="w-auto">
+          <Switch id={`${id}-guides`} checked={showGuides} onCheckedChange={setShowGuides} />
+          <FieldLabel htmlFor={`${id}-guides`} className="font-normal">Measurement guides</FieldLabel>
+        </Field>
+        <Field orientation="horizontal" className="w-auto">
+          <Switch id={`${id}-mask`} checked={showMask} onCheckedChange={setShowMask} disabled={!mask} />
+          <FieldLabel htmlFor={`${id}-mask`} className="font-normal">Background mask</FieldLabel>
+        </Field>
       </div>
       {showGuides && guides && (
-        <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span><span className="mr-1 inline-block h-0.5 w-3 bg-green-600 align-middle" />Crown / chin (measured)</span>
           <span><span className="mr-1 inline-block h-0.5 w-3 bg-yellow-500 align-middle" />Eye line (measured)</span>
           <span><span className="mr-1 inline-block h-2 w-3 bg-green-500/20 align-middle" />Allowed crown zone</span>

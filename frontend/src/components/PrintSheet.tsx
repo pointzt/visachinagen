@@ -46,15 +46,15 @@ export default function PrintSheet({ imageSrc, spec, filter }: PrintSheetProps) 
         onValueChange={(v) => v && setPaperId(v)} className="flex-wrap">
         {PAPER_SIZES.map((p) => (
           <ToggleGroupItem key={p.id} value={p.id}
-            className="text-xs data-[state=on]:border-primary data-[state=on]:bg-primary/10 data-[state=on]:text-primary">
+            className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:hover:bg-primary/90 data-[state=on]:hover:text-primary-foreground">
             {p.label}
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
 
       {layout.count === 0 ? (
-        <Alert className="border-amber-200 bg-amber-50 text-amber-800">
-          <AlertDescription className="text-amber-800">This photo doesn&apos;t fit on the selected paper size.</AlertDescription>
+        <Alert>
+          <AlertDescription>This photo doesn&apos;t fit on the selected paper size.</AlertDescription>
         </Alert>
       ) : (
         <>
@@ -85,11 +85,11 @@ export default function PrintSheet({ imageSrc, spec, filter }: PrintSheetProps) 
             </div>
           </div>
 
-          <p className="text-center text-[11px] text-muted-foreground">
+          <p className="text-center text-sm text-muted-foreground">
             {layout.count} photo{layout.count === 1 ? '' : 's'} ({layout.cols}x{layout.rows}) on {paper.label}
           </p>
 
-          <Button onClick={handleDownload} disabled={downloading} className="w-full" size="lg" variant="secondary">
+          <Button onClick={handleDownload} disabled={downloading} className="w-full" size="lg" variant="outline">
             {downloading ? <Spinner /> : <DownloadIcon />}
             Download Print Sheet
           </Button>

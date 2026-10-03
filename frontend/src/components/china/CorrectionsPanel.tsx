@@ -11,10 +11,10 @@ import type {
 } from '@/lib/chinaVisa'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field'
 import { Slider } from '@/components/ui/slider'
+import { Switch } from '@/components/ui/switch'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 interface CorrectionsPanelProps {
   corrections: Correction[]
@@ -38,27 +38,22 @@ const MODES: { id: Mode; label: string }[] = [
   { id: 'manual', label: 'Manual' },
 ]
 
-function Toggle({ checked, onChange, disabled, label }: { checked: boolean; onChange: (v: boolean) => void; disabled: boolean; label: string }) {
+function SwitchField({ checked, onChange, disabled, label }: { checked: boolean; onChange: (v: boolean) => void; disabled: boolean; label: string }) {
   const id = useId()
   return (
-    <div className="flex items-center gap-1.5">
-      <Checkbox id={id} checked={checked} disabled={disabled} onCheckedChange={(v) => onChange(v === true)} />
-      <Label htmlFor={id} className="text-xs font-normal">{label}</Label>
-    </div>
+    <Field orientation="horizontal" className="w-auto">
+      <Switch id={id} checked={checked} disabled={disabled} onCheckedChange={onChange} />
+      <FieldLabel htmlFor={id} className="font-normal">{label}</FieldLabel>
+    </Field>
   )
 }
 
 function ModePicker({ value, disabled, onChange }: { value: Mode; disabled: boolean; onChange: (m: Mode) => void }) {
-  const id = useId()
   return (
-    <RadioGroup value={value} onValueChange={(v) => onChange(v as Mode)} disabled={disabled} className="flex gap-3">
-      {MODES.map((m) => (
-        <div key={m.id} className="flex items-center gap-1.5">
-          <RadioGroupItem id={`${id}-${m.id}`} value={m.id} />
-          <Label htmlFor={`${id}-${m.id}`} className="text-xs font-normal">{m.label}</Label>
-        </div>
-      ))}
-    </RadioGroup>
+    <ToggleGroup type="single" variant="outline" size="sm" spacing={0} value={value} disabled={disabled}
+      onValueChange={(v) => v && onChange(v as Mode)} aria-label="Correction mode">
+      {MODES.map((m) => <ToggleGroupItem key={m.id} value={m.id} className="px-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:hover:bg-primary/90 data-[state=on]:hover:text-primary-foreground">{m.label}</ToggleGroupItem>)}
+    </ToggleGroup>
   )
 }
 
@@ -70,33 +65,32 @@ function CommitSlider({ label, value, min, max, step, format, disabled, onCommit
   // Only holds a value while the user is dragging; otherwise the committed value is shown.
   const [draft, setDraft] = useState<number | null>(null)
   const shown = draft ?? value
+  const id = useId()
   return (
-    <div className="space-y-2">
-      <div className="flex justify-between text-[11px]">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="tabular-nums text-muted-foreground">{format(shown)}</span>
+    <Field className="gap-2">
+      <div className="flex items-center justify-between">
+        <FieldLabel htmlFor={id} className="font-normal">{label}</FieldLabel>
+        <span className="text-sm tabular-nums text-muted-foreground">{format(shown)}</span>
       </div>
-      <Slider min={min} max={max} step={step} value={[shown]} disabled={disabled} aria-label={label}
+      <Slider id={id} min={min} max={max} step={step} value={[shown]} disabled={disabled} aria-label={label}
         onValueChange={([v]) => setDraft(v)}
         onValueCommit={([v]) => {
           if (v !== value) onCommit(v)
           setDraft(null)
         }} />
-    </div>
+    </Field>
   )
 }
 
 function Section({ title, applied, children }: { title: string; applied: boolean; children: React.ReactNode }) {
   return (
-    <div className="space-y-2.5 rounded-lg border p-3">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-foreground">{title}</p>
-        <Badge variant={applied ? 'default' : 'secondary'} className="text-[10px]">
-          {applied ? 'Applied' : 'Not applied'}
-        </Badge>
+    <section className="flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-medium">{title}</h3>
+        <Badge variant={applied ? 'secondary' : 'outline'}>{applied ? 'Applied' : 'Not applied'}</Badge>
       </div>
       {children}
-    </div>
+    </section>
   )
 }
 
@@ -109,15 +103,14 @@ export default function CorrectionsPanel({ corrections, overrides, disabled, onC
   const setCrop = (patch: Partial<Overrides['crop']>) => set({ crop: { ...overrides.crop, ...patch } })
 
   return (
-    <div className="space-y-3">
+    <FieldGroup className="gap-6">
       {rot && (
         <Section title={`Straighten (${rot.angle_deg >= 0 ? '+' : ''}${rot.angle_deg.toFixed(1)}°)`} applied={rot.applied}>
-          <p className="text-[11px] text-muted-foreground">
-            <span className="font-medium text-foreground/80">{TILT_LABEL[rot.classification]}</span> · confidence {Math.round(rot.confidence * 100)}% — {rot.reason}
-          </p>
-          <p className="text-[10px] text-muted-foreground/80">Rotation turns the whole photo rigidly. Facial features are never warped.</p>
+          <FieldDescription>
+            <span className="font-medium text-foreground">{TILT_LABEL[rot.classification]}</span> · confidence {Math.round(rot.confidence * 100)}%. {rot.reason}
+          </FieldDescription>
           {rot.suggested && !rot.applied && (
-            <Button variant="outline" size="sm" className="w-full border-primary/30 text-primary" disabled={disabled}
+            <Button variant="secondary" size="sm" className="w-fit" disabled={disabled}
               onClick={() => set({ rotation: 'manual', rotation_deg: rot.suggested_angle_deg })}>
               Straighten by {rot.suggested_angle_deg.toFixed(1)}° (suggested)
             </Button>
@@ -128,25 +121,27 @@ export default function CorrectionsPanel({ corrections, overrides, disabled, onC
             <CommitSlider label="Angle" value={overrides.rotation_deg} min={-15} max={15} step={0.1} disabled={disabled}
               format={(v) => `${v >= 0 ? '+' : ''}${v.toFixed(1)}°`} onCommit={(v) => set({ rotation_deg: v })} />
           )}
+          <FieldDescription className="text-xs">Rotation turns the whole photo rigidly. Facial features are never warped.</FieldDescription>
         </Section>
       )}
 
+      {bg && <FieldSeparator />}
       {bg && (
         <Section title="White background" applied={bg.applied}>
-          <p className="text-[11px] text-muted-foreground">{bg.reason}</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            <Toggle label="Replace background" checked={overrides.replace_background} disabled={disabled}
+          <FieldDescription>{bg.reason}</FieldDescription>
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            <SwitchField label="Replace background" checked={overrides.replace_background} disabled={disabled}
               onChange={(v) => set({ replace_background: v })} />
-            <Toggle label="Refine hair edges" checked={overrides.edge_refine} disabled={disabled || !overrides.replace_background}
+            <SwitchField label="Refine hair edges" checked={overrides.edge_refine} disabled={disabled || !overrides.replace_background}
               onChange={(v) => set({ edge_refine: v })} />
           </div>
         </Section>
       )}
 
+      {light && <FieldSeparator />}
       {light && (
         <Section title="Exposure & contrast" applied={light.applied}>
-          <p className="text-[11px] text-muted-foreground">{light.reason}</p>
-          <p className="text-[10px] text-muted-foreground/80">Only global brightness/contrast. No smoothing, reshaping or retouching.</p>
+          <FieldDescription>{light.reason}</FieldDescription>
           <ModePicker value={overrides.lighting} disabled={disabled}
             onChange={(m) => set({ lighting: m, exposure_ev: m === 'manual' ? light.exposure_ev : 0, contrast: m === 'manual' ? light.contrast : 0 })} />
           {overrides.lighting === 'manual' && (
@@ -157,21 +152,23 @@ export default function CorrectionsPanel({ corrections, overrides, disabled, onC
                 format={(v) => `+${Math.round(v * 100)}%`} onCommit={(v) => set({ contrast: v })} />
             </>
           )}
+          <FieldDescription className="text-xs">Only global brightness and contrast. No smoothing, reshaping or retouching.</FieldDescription>
         </Section>
       )}
 
+      {crop && <FieldSeparator />}
       {crop && (
         <Section title="Crop & position" applied>
-          <p className="text-[11px] text-muted-foreground">{crop.reason}</p>
+          <FieldDescription>{crop.reason}</FieldDescription>
           <CommitSlider label="Zoom" value={overrides.crop.scale} min={0.9} max={1.1} step={0.005} disabled={disabled}
             format={(v) => `${Math.round(v * 100)}%`} onCommit={(v) => setCrop({ scale: v })} />
           <CommitSlider label="Move up / down" value={overrides.crop.offset_y} min={-0.08} max={0.08} step={0.0025} disabled={disabled}
             format={(v) => `${v > 0 ? '↓' : v < 0 ? '↑' : ''}${Math.abs(v * 100).toFixed(1)}%`} onCommit={(v) => setCrop({ offset_y: v })} />
           <CommitSlider label="Move left / right" value={overrides.crop.offset_x} min={-0.08} max={0.08} step={0.0025} disabled={disabled}
             format={(v) => `${v > 0 ? '→' : v < 0 ? '←' : ''}${Math.abs(v * 100).toFixed(1)}%`} onCommit={(v) => setCrop({ offset_x: v })} />
-          <p className="text-[10px] text-muted-foreground/80">Every adjustment is re-validated against the MFA rules.</p>
+          <FieldDescription className="text-xs">Every adjustment is re-validated against the MFA rules.</FieldDescription>
         </Section>
       )}
-    </div>
+    </FieldGroup>
   )
 }

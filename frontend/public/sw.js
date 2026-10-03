@@ -1,8 +1,8 @@
-// PhotoGen service worker: makes the app installable and keeps the shell available offline.
+// China Visa Generator service worker: makes the app installable and keeps the shell available offline.
 // Photo processing always needs the network. /api is never cached, so photos never land in
 // the browser cache.
 
-const VERSION = 'v1'
+const VERSION = 'v2'
 const STATIC_CACHE = `photogen-static-${VERSION}`
 const PAGE_CACHE = `photogen-pages-${VERSION}`
 const OFFLINE_URL = '/offline'

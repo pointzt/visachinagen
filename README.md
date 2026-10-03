@@ -2,11 +2,11 @@
 
 <div align="center">
 
-<img src="frontend/public/logo.jpg" alt="PhotoGen" width="140" />
+<img src="frontend/public/logo.jpg" alt="China Visa Generator" width="140" />
 
 <br/>
 
-# PhotoGen
+# China Visa Generator
 
 ### Your China visa photo, done right. For free.
 
@@ -190,7 +190,7 @@ The China visa engine is documented in [docs/china-visa-engine.md](docs/china-vi
 <summary>Click to expand</summary>
 
 ```
-photogen/
+visachinagen/
 ├── backend/
 │   ├── app/
 │   │   ├── api/routes/
@@ -228,7 +228,7 @@ registered in production builds only. It caches the app shell for offline use an
 
 ## 📄 License
 
-[MIT](LICENSE)
+[MIT](LICENSE). Based on [PhotoGen](https://github.com/deidaraiorek/photogen) by deidaraiorek.
 
 <div align="right">
 

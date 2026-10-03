@@ -1,19 +1,20 @@
 import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
-import { Inter } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
+import { ThemeProvider } from '@/components/theme-provider'
+import { SITE_NAME, SITE_URL } from '@/lib/site'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://photogen.io'
+const geistSans = Geist({ subsets: ['latin'], variable: '--font-sans' })
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
   title: {
-    default: 'PhotoGen - Free China Visa Photo Maker Online',
-    template: '%s | PhotoGen',
+    default: `${SITE_NAME} - Free China Visa Photo Maker Online`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
     'Create a China visa photo for free, checked against the Chinese MFA 2016 photo requirements. AI background removal, tilt and lighting correction, and 420×560 digital or 33×48 mm print output. No signup required, no watermark.',
@@ -29,11 +30,11 @@ export const metadata: Metadata = {
     'visa photo no watermark',
   ],
   openGraph: {
-    title: 'PhotoGen - Free China Visa Photo Maker',
+    title: `${SITE_NAME} - Free China Visa Photo Maker`,
     description:
       'Create a compliant China visa photo instantly. Checked against the MFA 2016 requirements. 100% free, no signup.',
     url: SITE_URL,
-    siteName: 'PhotoGen',
+    siteName: SITE_NAME,
     type: 'website',
     locale: 'en_US',
     images: [
@@ -41,19 +42,19 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'PhotoGen - Free China Visa Photo Maker',
+        alt: `${SITE_NAME} - Free China Visa Photo Maker`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PhotoGen - Free China Visa Photo Maker',
+    title: `${SITE_NAME} - Free China Visa Photo Maker`,
     description:
       'China visa photos for free. No signup, no watermark, no data stored.',
     images: [`${SITE_URL}/og-image.png`],
   },
-  applicationName: 'PhotoGen',
-  appleWebApp: { capable: true, title: 'PhotoGen', statusBarStyle: 'default' },
+  applicationName: SITE_NAME,
+  appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: 'default' },
   formatDetection: { telephone: false },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
@@ -61,7 +62,10 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -70,7 +74,7 @@ export const viewport: Viewport = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'PhotoGen',
+  name: SITE_NAME,
   url: SITE_URL,
   description:
     'Free China visa photo maker built to the Chinese MFA 2016 photo requirements.',
@@ -89,7 +93,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn('font-sans', inter.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn('font-sans', geistSans.variable, geistMono.variable)}>
       <head>
         <script
           type="application/ld+json"
@@ -97,7 +101,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased">
-        <TooltipProvider>{children}</TooltipProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
         <Analytics />
         <ServiceWorkerRegister />
       </body>

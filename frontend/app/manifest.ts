@@ -1,17 +1,18 @@
 import type { MetadataRoute } from 'next'
+import { SITE_NAME, SITE_SHORT_NAME } from '@/lib/site'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',
-    name: 'PhotoGen - China Visa Photo Maker',
-    short_name: 'PhotoGen',
+    name: SITE_NAME,
+    short_name: SITE_SHORT_NAME,
     description:
       'Create a China visa photo checked against the Chinese MFA 2016 photo requirements. Free, no signup, no watermark.',
     start_url: '/',
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',
-    background_color: '#f8fafc',
+    background_color: '#ffffff',
     theme_color: '#ffffff',
     categories: ['photo', 'utilities', 'travel'],
     icons: [
